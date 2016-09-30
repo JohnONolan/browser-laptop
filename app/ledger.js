@@ -869,6 +869,10 @@ var ledgerInfo = {
   buyURL: undefined,
   bravery: undefined,
 
+  // wallet credentials
+  paymentId: undefined,
+  passphrase: undefined,
+
   hasBitcoinHandler: false,
 
   // geoIP/exchange information
@@ -1107,6 +1111,9 @@ var getStateInfo = (state) => {
   var info = state.paymentInfo
   var then = underscore.now() - msecs.year
 
+  ledgerInfo.paymentId = state.properties.wallet.paymentId
+  ledgerInfo.passphrase = state.properties.wallet.keychains.passphrase
+
   ledgerInfo.created = !!state.properties.wallet
   ledgerInfo.creating = !ledgerInfo.created
 
@@ -1228,7 +1235,6 @@ var getPaymentInfo = () => {
 
       info = underscore.extend(info, underscore.pick(body, [ 'buyURL', 'buyURLExpires', 'balance', 'unconfirmed', 'satoshis' ]))
       info.address = client.getWalletAddress()
-      info.passphrase = client.getWalletPassphrase()
       if ((amount) && (currency)) {
         info = underscore.extend(info, { amount: amount, currency: currency })
         if ((body.rates) && (body.rates[currency])) {
